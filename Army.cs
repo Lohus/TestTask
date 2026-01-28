@@ -8,7 +8,17 @@ public class Army: MonoBehaviour
     public string nameArmy;
     public int countUnits {get; private set;}
     public int maxUnitInArmy {get; private set;} = 20;
+    public List<Property> properties;
     List<GameObject> units = new List<GameObject>();
+
+    public void OnEnable()
+    {
+        EventsA.StartButtle.AddListener(GenerateArmy);
+    }
+    public void OnDestroy()
+    {
+        EventsA.StartButtle.RemoveListener(GenerateArmy);
+    }
     public void GenerateArmy()
     {
         ArmyGenerator.instance.GenerateArmy(this, prefabUnit, transform);
@@ -30,5 +40,10 @@ public class Army: MonoBehaviour
     public void KillUnit(GameObject unit)
     {
         units.Remove(unit);
+        if (units.Count == 0)
+        {
+            Debug.Log($"{nameArmy} is dead");
+            EventsA.ArmyDeath?.Invoke(nameArmy);
+        }
     }
 }

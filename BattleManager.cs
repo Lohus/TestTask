@@ -11,7 +11,7 @@ public class BattleManager : MonoBehaviour
         
         for (int i = 0; i < armies.Count(); i++)
         {
-            armies[i].GenerateArmy();
+            //armies[i].GenerateArmy();
         }
     }
 

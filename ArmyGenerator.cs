@@ -32,6 +32,7 @@ using UnityEngine;
                 Vector3 cellPosition = startPosition + new Vector3(x * sizeX, height, z * sizeZ);
                 _unit = Instantiate(prefabUnit, cellPosition, transform.rotation, transform);
                 _unit.GetComponent<BaseUnit>().SetArmy(army);
+                _unit.GetComponent<BaseUnit>().ApplyProperty();
                 army.AddUnit(_unit);
             }
         }

@@ -13,17 +13,15 @@ public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
     public BaseUnit target = null;
     bool isAttacking = false;
     private Coroutine attackCoroutine;
-    [SerializeField] List<Property> properties;
-    void Start()
+    public void ApplyProperty()
     {
-        if (properties.Count != 0)
+        if (army.properties.Count != 0)
         {
-            foreach (Property property in properties)
+            foreach (Property property in army.properties)
             {
                 property.ApplyProperty(this);
             }
         }
-        Debug.Log($"{army.name}");
     }
     void Update()
     {
