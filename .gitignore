@@ -1,0 +1,5 @@
+*.cs.meta
+*.meta
+*.vscode
+LICENSE
+*.DS_store
