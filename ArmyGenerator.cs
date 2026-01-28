@@ -1,29 +1,38 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class ArmyGenerator: MonoBehaviour
+ public class ArmyGenerator : MonoBehaviour
 {
-    [SerializeField] float sizeX = 1;
-    [SerializeField] float sizeZ = 1;
-    [SerializeField] int countX = 5;
-    [SerializeField] int countZ = 4;
-    [SerializeField] float height = 0.5f;
-    public GameObject prefUnit;
-    private GameObject[,] gridUnits;
-    private Vector3 startPosition;
-    public void Start()
+    public static ArmyGenerator instance;
+    private float sizeX = 2;
+    private  float sizeZ = 2;
+    private int countX = 5;
+    private  int countZ = 4;
+    private  float height = 0.5f;
+    public void Awake()
     {
-        startPosition = transform.position - new Vector3(2 * sizeX, 0, 0);
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    public void GenerateArmy(Army army)
+    public void GenerateArmy(Army army, GameObject prefabUnit, Transform transform)
     {
-        gridUnits = new GameObject[countX, countZ];
+        Vector3 startPosition = transform.position - new Vector3(2 * sizeX, 0, 0);
+        startPosition = transform.position - new Vector3(2 * sizeX, 0, 0);
+        GameObject _unit;
         for (int x = 0; x < countX; x++)
         {
             for (int z = 0; z < countZ; z++ )
             {
                 Vector3 cellPosition = startPosition + new Vector3(x * sizeX, height, z * sizeZ);
-                gridUnits[x, z] = Instantiate(prefUnit, cellPosition, transform.rotation);
-                gridUnits[x, z].GetComponent<BaseUnit>().SetArmy(army);
+                _unit = Instantiate(prefabUnit, cellPosition, transform.rotation, transform);
+                _unit.GetComponent<BaseUnit>().SetArmy(army);
+                army.AddUnit(_unit);
             }
         }
     }
