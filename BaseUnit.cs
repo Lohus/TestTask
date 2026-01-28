@@ -14,10 +14,6 @@ public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
     bool isAttacking = false;
     private Coroutine attackCoroutine;
     [SerializeField] List<Property> properties;
-    void Awake()
-    {
-        //BaseStats.GetStats(this);
-    }
     void Start()
     {
         if (properties.Count != 0)
@@ -28,7 +24,6 @@ public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
             }
         }
         Debug.Log($"{army.name}");
-        //Search();
     }
     void Update()
     {
@@ -41,6 +36,7 @@ public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
         if (HP <= 0)
         {
             Debug.Log(gameObject.name + " destoyed");
+            army.KillUnit(gameObject);
             Destroy(gameObject);
         }
     }

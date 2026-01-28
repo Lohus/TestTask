@@ -5,7 +5,7 @@ public class Army: MonoBehaviour
     [SerializeField] GameObject prefabUnit;
     private static int _count = 0;
     public int id { get; private set;} = 0;
-    public string name;
+    public string nameArmy;
     public int countUnits {get; private set;}
     public int maxUnitInArmy {get; private set;} = 20;
     List<GameObject> units = new List<GameObject>();
@@ -17,13 +17,17 @@ public class Army: MonoBehaviour
     {
         _count ++;
        id = _count;
-       name = $"Army {id}";
+       nameArmy = $"Army {id}";
     }
     public void AddUnit(GameObject unit)
     {
         if (units.Count < maxUnitInArmy) units.Add(unit);
     }
     public void RemoveUnit(GameObject unit)
+    {
+        units.Remove(unit);
+    }
+    public void KillUnit(GameObject unit)
     {
         units.Remove(unit);
     }
