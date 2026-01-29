@@ -5,6 +5,9 @@ public class UIELements : MonoBehaviour
     Property[] meshProperties;
     Property[] colorProperties;
     Property[] sizeProperties;
+    MeshProperty meshProperty;
+    ColorProperty colorProperty;
+    SizeProperty sizeProperty;
     public void Start()
     {
         meshProperties = Resources.LoadAll<Property>("Property/Mesh");

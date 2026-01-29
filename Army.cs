@@ -8,7 +8,7 @@ public class Army: MonoBehaviour
     public string nameArmy;
     public int countUnits {get; private set;}
     public int maxUnitInArmy {get; private set;} = 20;
-    public List<Property> properties;
+    public List<Property> properties = new List<Property>();
     List<GameObject> units = new List<GameObject>();
 
     public void OnEnable()
