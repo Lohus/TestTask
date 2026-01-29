@@ -47,20 +47,6 @@ public class SimpleMeshDropdown : MonoBehaviour
             dropdown.options.Add(new TMP_Dropdown.OptionData(property.name));
         }
         dropdown.value = -1;
-        if (army.properties.Count == 0)
-        {
-            label.text = folder;
-        }
-        else
-        {
-            foreach(Property prop in army.properties)
-            {
-                if (prop.GetType() == properties[0].GetType())
-                {
-                    label.text = prop.name;
-                }
-            }
-        }
     }
     void OnDropdownChanged(int index)
 {
