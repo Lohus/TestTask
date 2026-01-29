@@ -1,8 +1,5 @@
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System;
 using System.Threading.Tasks;
 
 public class SimpleMeshDropdown : MonoBehaviour
@@ -19,7 +16,7 @@ public class SimpleMeshDropdown : MonoBehaviour
         EventsA.ChangeProperty.AddListener(Refresh);
         dropdown = gameObject.GetComponent<TMP_Dropdown>();
         properties = Resources.LoadAll<Property>($"Property/{folder}");        
-        dropdown.onValueChanged.AddListener((index) => SelectProperty(army, properties[index]));
+        dropdown.onValueChanged.AddListener(OnDropdownChanged);
         await Task.Delay(500);
         Refresh();
     }
@@ -36,18 +33,21 @@ public class SimpleMeshDropdown : MonoBehaviour
                 if(army.properties[i].GetType() == property.GetType())
                 {
                     army.properties[i] = property;
+                    return;
                 } 
             }
+            army.properties.Add(property);
         }
     }
     void Refresh()
     {
         dropdown.ClearOptions();
-        foreach (var mesh in properties)
+        foreach (Property property in properties)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData(mesh.name));
+            dropdown.options.Add(new TMP_Dropdown.OptionData(property.name));
         }
-        if (army.properties.Count == 0 && army.properties != null)
+        dropdown.value = -1;
+        if (army.properties.Count == 0)
         {
             label.text = folder;
         }
@@ -62,9 +62,16 @@ public class SimpleMeshDropdown : MonoBehaviour
             }
         }
     }
+    void OnDropdownChanged(int index)
+{
+    if (index >= 0 && index < properties.Length && properties[index] != null)
+    {
+        SelectProperty(army, properties[index]);
+    }
+}
     public void OnDestroy()
     {
         EventsA.ChangeProperty.RemoveListener(Refresh);
-        dropdown.onValueChanged.RemoveListener((index) => SelectProperty(army, properties[index]));
+        dropdown.onValueChanged.RemoveListener(OnDropdownChanged);
     }
 }

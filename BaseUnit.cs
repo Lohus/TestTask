@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
+public class BaseUnit : MonoBehaviour, IDamageable
 {
     [SerializeField] public Army army { get; private set;}
     const float distance = 20;
@@ -95,6 +95,10 @@ public class BaseUnit : MonoBehaviour, IMove, IAttack, ISearch, IDamageable
                 }
             }
         }
+    }
+    public void BattleRage()
+    {
+        ATK *= 2;
     }
 
     IEnumerator AttackTarget()

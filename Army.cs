@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 public class Army: MonoBehaviour
@@ -10,6 +11,7 @@ public class Army: MonoBehaviour
     public int countUnits {get; private set;}
     public int maxUnitInArmy {get; private set;} = 20;
     public List<Property> properties = new List<Property>();
+    public static bool BattleRage = false;
     List<GameObject> units = new List<GameObject>();
 
     public void OnEnable()
@@ -20,6 +22,7 @@ public class Army: MonoBehaviour
     public void OnDestroy()
     {
         EventsA.StartButtle.RemoveListener(GenerateArmy);
+        EventsA.ArmyDeath.RemoveListener(ArmyDeath);
     }
     public void GenerateArmy()
     {
@@ -47,9 +50,18 @@ public class Army: MonoBehaviour
             Debug.Log($"{nameArmy} is dead");
             EventsA.ArmyDeath?.Invoke();
         }
+        else if (units.Count <= maxUnitInArmy/2 && !BattleRage)
+        {
+            BattleRage = true;
+            foreach(GameObject liveUnit in units)
+            {
+                liveUnit.GetComponent<BaseUnit>().BattleRage();
+            }
+        }
     }
     void ArmyDeath()
     {
+        BattleRage = false;
         if (units.Count > 0)
         {
             EventsA.ArmyWin?.Invoke(nameArmy);
