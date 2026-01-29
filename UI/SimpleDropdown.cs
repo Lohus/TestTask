@@ -2,22 +2,21 @@ using UnityEngine;
 using TMPro;
 using System.Threading.Tasks;
 
-public class SimpleMeshDropdown : MonoBehaviour
+public class SumpleDropdown : MonoBehaviour
 {
-    public string folder;
-    public Army army;
+    [SerializeField] string folder;
+    [SerializeField] Army army;
     private TMP_Dropdown dropdown;
     private TextMeshProUGUI label;
     private Property[] properties;
     
-    public async void Start()
+    public void Start()
     {
-        label = transform.Find("Label").GetComponent<TextMeshProUGUI>();
-        EventsA.ChangeProperty.AddListener(Refresh);
         dropdown = gameObject.GetComponent<TMP_Dropdown>();
-        properties = Resources.LoadAll<Property>($"Property/{folder}");        
         dropdown.onValueChanged.AddListener(OnDropdownChanged);
-        await Task.Delay(500);
+        EventsA.ChangeProperty.AddListener(Refresh);
+        label = transform.Find("Label").GetComponent<TextMeshProUGUI>();
+        properties = Resources.LoadAll<Property>($"Property/{folder}");        
         Refresh();
     }
     public void SelectProperty(Army army, Property property)
@@ -49,12 +48,12 @@ public class SimpleMeshDropdown : MonoBehaviour
         dropdown.value = -1;
     }
     void OnDropdownChanged(int index)
-{
+    {
     if (index >= 0 && index < properties.Length && properties[index] != null)
     {
         SelectProperty(army, properties[index]);
     }
-}
+    }
     public void OnDestroy()
     {
         EventsA.ChangeProperty.RemoveListener(Refresh);

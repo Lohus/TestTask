@@ -1,14 +1,13 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
  public class ArmyGenerator : MonoBehaviour
 {
     public static ArmyGenerator instance;
     private float sizeX = 2;
-    private  float sizeZ = 2;
+    private float sizeZ = 2;
     private int countX = 5;
-    private  int countZ = 4;
-    private  float height = 0.5f;
+    private int countZ = 4;
+    private float height = 0.5f;
     public void Awake()
     {
         if (instance == null)

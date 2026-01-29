@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 public class Army: MonoBehaviour
 {
@@ -13,6 +11,12 @@ public class Army: MonoBehaviour
     public List<Property> properties = new List<Property>();
     public static bool BattleRage = false;
     List<GameObject> units = new List<GameObject>();
+    public Army()
+    {
+        _count ++;
+       id = _count;
+       nameArmy = $"Army {id}";
+    }
 
     public void OnEnable()
     {
@@ -28,12 +32,6 @@ public class Army: MonoBehaviour
     {
         ArmyGenerator.instance.GenerateArmy(this, prefabUnit, transform);
     }
-    public Army()
-    {
-        _count ++;
-       id = _count;
-       nameArmy = $"Army {id}";
-    }
     public void AddUnit(GameObject unit)
     {
         if (units.Count < maxUnitInArmy) units.Add(unit);
@@ -47,7 +45,6 @@ public class Army: MonoBehaviour
         units.Remove(unit);
         if (units.Count == 0)
         {
-            Debug.Log($"{nameArmy} is dead");
             EventsA.ArmyDeath?.Invoke();
         }
         else if (units.Count <= maxUnitInArmy/2 && !BattleRage)

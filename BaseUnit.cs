@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseUnit : MonoBehaviour, IDamageable
 {
     [SerializeField] public Army army { get; private set;}
-    const float distance = 20;
+    private const float distanceSearch = 20;
+    private const float distanceAttack = 2f;
     public int HP = 100;
     public int ATK = 10;
     public int SPEED = 10;
@@ -13,6 +13,10 @@ public class BaseUnit : MonoBehaviour, IDamageable
     public BaseUnit target = null;
     bool isAttacking = false;
     private Coroutine attackCoroutine;
+    void Update()
+    {
+        Move();
+    }
     public void ApplyProperty()
     {
         if (army.properties.Count != 0)
@@ -23,17 +27,11 @@ public class BaseUnit : MonoBehaviour, IDamageable
             }
         }
     }
-    void Update()
-    {
-        Move();
-    }
     public void TakeDamage(int damage)
     {
-        Debug.Log(gameObject.name + " take " + damage + " damage");
         HP -= damage;
         if (HP <= 0)
         {
-            Debug.Log(gameObject.name + " destoyed");
             army.KillUnit(gameObject);
             Destroy(gameObject);
         }
@@ -43,7 +41,7 @@ public class BaseUnit : MonoBehaviour, IDamageable
         if (target != null)
         {
             transform.LookAt(target.transform);
-            if((target.transform.position - transform.position).magnitude > 1.5)
+            if((target.transform.position - transform.position).magnitude > distanceAttack)
             {
                 if (isAttacking)
                 {
@@ -67,16 +65,15 @@ public class BaseUnit : MonoBehaviour, IDamageable
     }
     public void Attack(IDamageable target, int damage)
     {
-        Debug.Log(gameObject.name + " attack " + target);
         target.TakeDamage(damage);
     }
     public void Search()
     {
         if (target == null)
         {
-            if (Physics.CheckSphere(transform.position, distance))
+            if (Physics.CheckSphere(transform.position, distanceSearch))
             {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, distance);
+                Collider[] colliders = Physics.OverlapSphere(transform.position, distanceSearch);
                 float closestDistance = float.MaxValue; 
                 foreach (Collider col in colliders)
                 {
@@ -86,10 +83,10 @@ public class BaseUnit : MonoBehaviour, IDamageable
                         {
                             float distanceToUnit = Vector3.Distance(col.transform.position, transform.position);
                             if (distanceToUnit < closestDistance)
-                                {
-                                    closestDistance = distanceToUnit;
-                                    target = unit;
-                                }
+                            {
+                                closestDistance = distanceToUnit;
+                                target = unit;
+                            }
                         }
                     }
                 }
@@ -104,7 +101,7 @@ public class BaseUnit : MonoBehaviour, IDamageable
     IEnumerator AttackTarget()
     {
         isAttacking = true;
-        while (target != null && (target.transform.position - transform.position).magnitude <= 2)
+        while (target != null && (target.transform.position - transform.position).magnitude <= distanceAttack)
         {
             Attack(target, ATK);
             yield return new WaitForSeconds(ATKSPD);
