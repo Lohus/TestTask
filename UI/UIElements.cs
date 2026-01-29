@@ -1,13 +1,24 @@
+using TMPro;
 using UnityEngine;
 
 public class UIELements : MonoBehaviour
 {
+    [SerializeField] GameObject winsWindow;
+    [SerializeField] TextMeshProUGUI message;
     Property[] meshProperties;
     Property[] colorProperties;
     Property[] sizeProperties;
     MeshProperty meshProperty;
     ColorProperty colorProperty;
     SizeProperty sizeProperty;
+    public void OnEnable()
+    {
+        EventsA.ArmyWin.AddListener((nameArmy) => ActiveWinWindow(nameArmy));
+    }
+    public void OnDestroy()
+    {
+        
+    }
     public void Start()
     {
         meshProperties = Resources.LoadAll<Property>("Property/Mesh");
@@ -28,5 +39,10 @@ public class UIELements : MonoBehaviour
         army.properties.Add(colorProperties[Random.Range(0, colorProperties.Length)]);
         army.properties.Add(sizeProperties[Random.Range(0, sizeProperties.Length)]);
         EventsA.ChangeProperty?.Invoke();
+    }
+    void ActiveWinWindow(string armyName)
+    {
+        message.text = $"{armyName} is win!";
+        winsWindow.SetActive(true);
     }
 }

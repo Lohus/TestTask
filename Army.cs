@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 public class Army: MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Army: MonoBehaviour
     public void OnEnable()
     {
         EventsA.StartButtle.AddListener(GenerateArmy);
+        EventsA.ArmyDeath.AddListener(ArmyDeath);
     }
     public void OnDestroy()
     {
@@ -43,7 +45,19 @@ public class Army: MonoBehaviour
         if (units.Count == 0)
         {
             Debug.Log($"{nameArmy} is dead");
-            EventsA.ArmyDeath?.Invoke(nameArmy);
+            EventsA.ArmyDeath?.Invoke();
         }
+    }
+    void ArmyDeath()
+    {
+        if (units.Count > 0)
+        {
+            EventsA.ArmyWin?.Invoke(nameArmy);
+        }
+        foreach(GameObject unit in units)
+        {
+            Destroy(unit);
+        }
+        units.Clear();
     }
 }
